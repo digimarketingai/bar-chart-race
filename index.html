@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bar Chart Race — Demo</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            background: #050510;
+            min-height: 100vh;
+        }
+        #race {
+            width: 95%;
+            max-width: 900px;
+            margin: 20px auto;
+        }
+    </style>
+</head>
+<body>
+
+    <div id="race"></div>
+
+    <script src="bar-chart-race.js"></script>
+    <script>
+        // ── Generate demo data ──────────────────────────────
+        const companies = [
+            { name: "Walmart",   icon: "WM", color: "#0071ce", base: 420, growth: 1.035, vol: 12 },
+            { name: "Amazon",    icon: "AZ", color: "#ff9900", base: 35,  growth: 1.22,  vol: 18 },
+            { name: "Apple",     icon: "AP", color: "#a8a8a8", base: 65,  growth: 1.14,  vol: 15 },
+            { name: "Google",    icon: "GO", color: "#4285f4", base: 30,  growth: 1.16,  vol: 10 },
+            { name: "Microsoft", icon: "MS", color: "#00a4ef", base: 62,  growth: 1.10,  vol: 8 },
+            { name: "Samsung",   icon: "SS", color: "#1428a0", base: 135, growth: 1.05,  vol: 14 },
+            { name: "Toyota",    icon: "TY", color: "#eb0a1e", base: 210, growth: 1.03,  vol: 10 },
+            { name: "Meta",      icon: "MT", color: "#0668e1", base: 5,   growth: 1.28,  vol: 12 },
+            { name: "Tesla",     icon: "TS", color: "#cc0000", base: 0.1, growth: 1.45,  vol: 30 },
+            { name: "Netflix",   icon: "NF", color: "#e50914", base: 2,   growth: 1.22,  vol: 8 },
+            { name: "Nvidia",    icon: "NV", color: "#76b900", base: 4,   growth: 1.30,  vol: 20 },
+            { name: "Alibaba",   icon: "AB", color: "#ff6a00", base: 8,   growth: 1.25,  vol: 16 },
+        ];
+
+        const startYear = 2010;
+        const endYear = 2025;
+        const labels = [];
+        const sublabels = [];
+        const quarters = ['Q1', 'Q2', 'Q3', 'Q4'];
+
+        for (let y = startYear; y <= endYear; y++) {
+            for (let q = 0; q < 4; q++) {
+                labels.push(String(y));
+                sublabels.push(quarters[q]);
+            }
+        }
+
+        const datasets = companies.map(c => {
+            const values = [];
+            let val = c.base;
+            for (let i = 0; i < labels.length; i++) {
+                val *= Math.pow(c.growth, 0.25);
+                val += (Math.random() - 0.45) * c.vol;
+                val = Math.max(val, 0.5);
+                values.push(Math.round(val * 10) / 10);
+            }
+            return {
+                name: c.name,
+                icon: c.icon,
+                color: c.color,
+                values: values
+            };
+        });
+
+        // ── Initialize ──────────────────────────────────────
+        const race = new BarChartRace('#race', {
+            title: '🚀 Global Revenue Race',
+            subtitle: 'Top Companies Battle for #1 — Revenue in Billions USD',
+            data: {
+                labels: labels,
+                sublabels: sublabels,
+                datasets: datasets
+            },
+            barCount: 10,
+            barHeight: 44,
+            duration: 500,
+            controls: true,
+            particles: true,
+            confetti: true,
+            theme: 'dark',
+            formatValue: function (n) {
+                if (n >= 1000) return (n / 1000).toFixed(1) + 'T';
+                if (n >= 1) return Math.round(n) + 'B';
+                return n.toFixed(1) + 'B';
+            }
+        });
+    </script>
+
+</body>
+</html>
