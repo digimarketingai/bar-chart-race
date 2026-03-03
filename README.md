@@ -15,7 +15,7 @@ A zero-dependency, ultra-smooth animated bar chart race library. One JS file. No
 ```html
 <div id="race"></div>
 
-<script src="https://digimarketingai.github.io/bar-chart-race/bar-chart-race.js"></script>
+<script src="https://digimarketingai.github.io/bar-chart-race/BarChartRace.js"></script>
 <script>
   new BarChartRace('#race', {
     title: 'My Race',
